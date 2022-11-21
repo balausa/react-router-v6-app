@@ -1,24 +1,35 @@
-import logo from './logo.svg';
+import { Routes, Route, Navigate } from 'react-router-dom'
+import Aboutpage from './pages/Aboutpage'
+import Blogpage from './pages/Blogpage'
+import Homepage from './pages/Homepage'
+import Layout from './components/Layout'
+import Singlepage from './pages/Singlepage'
+import Createpost from './pages/Createpost'
+import Editpost from './pages/Editpost'
+import Login from './pages/Login'
+import RequireAuth from './components/hoc/RequireAuth'
+import { AuthProvider } from './components/hoc/AuthProvider'
 import './App.css';
-
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Homepage />} />
+          <Route path="about" element={<Aboutpage />} />
+          <Route path="about-us" element={<Navigate to="/about" replace/>} />
+          <Route path="posts" element={<Blogpage />} />
+          <Route path="posts/:id" element={<Singlepage />} />
+          <Route path="posts/:id/edit" element={<Editpost />} />
+          <Route path="posts/new" element={
+          <RequireAuth>
+            <Createpost />
+          </RequireAuth>}/>
+          <Route path="login" element={<Login />} />
+          <Route path="*" element={<Homepage />} />
+        </Route>
+      </Routes>
+    </AuthProvider>
   );
 }
 
